@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Card from "../components/ui/Card";
 import { Politician, Manifesto } from "../types";
+import { mockPoliticians, mockManifestos } from "../data/Mock";
 
 // ホームページ
 const Home: React.FC = () => {
@@ -18,66 +19,11 @@ const Home: React.FC = () => {
       try {
         setIsLoading(true);
 
-        // 注目の政治家データ取得
-        // 実際のAPIリクエストに置き換える
-        const politiciansData: Politician[] = [
-          {
-            id: "1",
-            name: "山田太郎",
-            party: "未来党",
-            position: "衆議院議員",
-            profile: "東京都出身。経済政策を専門とし、地域活性化に注力。",
-            nationality: "日本",
-            imageUrl: "/サラリーマン.png",
-          },
-          {
-            id: "2",
-            name: "佐藤花子",
-            party: "改革党",
-            position: "参議院議員",
-            profile: "大阪府出身。教育改革と女性の社会進出支援に取り組む。",
-            nationality: "日本",
-            imageUrl: "/お団子あたまのキャリアウーマン.png",
-          },
-          {
-            id: "3",
-            name: "鈴木一郎",
-            party: "国民党",
-            position: "衆議院議員",
-            profile: "北海道出身。農業政策と地方創生を専門とする。",
-            nationality: "日本",
-            imageUrl: "/おじいちゃんのフリー素材2.png",
-          },
-        ];
+        // Mock.tsから政治家データを取得
+        const politiciansData = mockPoliticians;
 
-        // 最新のマニフェストデータ取得
-        // 実際のAPIリクエストに置き換える
-        const manifestosData: Manifesto[] = [
-          {
-            id: "1",
-            politician_id: "1",
-            title: "地域経済活性化プラン",
-            description: "地方の中小企業支援と雇用創出を目指します。",
-            created_at: "2023-06-20",
-            updated_at: "2023-06-20",
-          },
-          {
-            id: "2",
-            politician_id: "2",
-            title: "教育改革プログラム",
-            description: "デジタル教育の推進と教育格差の是正に取り組みます。",
-            created_at: "2023-05-15",
-            updated_at: "2023-05-15",
-          },
-          {
-            id: "3",
-            politician_id: "3",
-            title: "農業振興政策",
-            description: "地方の農業を活性化し、若者の就農を支援します。",
-            created_at: "2023-04-10",
-            updated_at: "2023-04-10",
-          },
-        ];
+        // Mock.tsからマニフェストデータを取得
+        const manifestosData = mockManifestos;
 
         setFeaturedPoliticians(politiciansData);
         setLatestManifestos(manifestosData);
@@ -139,7 +85,7 @@ const Home: React.FC = () => {
               key={politician.id}
               className="overflow-hidden rounded-lg border border-gray-200 transition-shadow hover:shadow-lg"
             >
-              <Link to={`/politicians/${politician.id}`}>
+              <Link to={`/politician/${politician.id}`}>
                 <div className="h-48 overflow-hidden">
                   <img
                     src={politician.imageUrl || "/assets/default-profile.png"}

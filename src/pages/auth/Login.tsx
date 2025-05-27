@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
+import { login as loginAction } from '../../actions/auth';
 
 // ログインページ
 const Login: React.FC = () => {
@@ -25,12 +26,19 @@ const Login: React.FC = () => {
       setIsLoading(true);
       setError(null);
       
-      const success = await login(email, password);
+      // Server Actionsを使用したログイン処理
+      const formData = new FormData();
+      formData.append('email', email);
+      formData.append('password', password);
       
-      if (success) {
+      const result = await loginAction(formData);
+      
+      if (result.success) {
+        // AuthContextのログイン処理を呼び出し
+        await login(email, password);
         navigate('/');
       } else {
-        setError('ログインに失敗しました。メールアドレスとパスワードを確認してください。');
+        setError(result.error || 'ログインに失敗しました。メールアドレスとパスワードを確認してください。');
       }
     } catch (err) {
       setError('ログイン処理中にエラーが発生しました。');

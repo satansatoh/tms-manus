@@ -5,6 +5,11 @@ import { useAuth } from '../contexts/AuthContext';
 import Card from '../components/ui/Card';
 import Modal from '../components/ui/Modal';
 import { Politician, Promise, CategoryFocus } from '../types';
+import { 
+  getMockPoliticianById, 
+  getMockPromisesByPoliticianId, 
+  getMockCategoryFocusByPoliticianId 
+} from '../data/Mock';
 
 // 政治家詳細ページ
 const PoliticianDetail: React.FC = () => {
@@ -20,81 +25,30 @@ const PoliticianDetail: React.FC = () => {
   const [showReportModal, setShowReportModal] = useState<boolean>(false);
   const [reportContent, setReportContent] = useState<string>('');
 
-  // データ取得
+  // URLのパスパラメータからデータ取得
   useEffect(() => {
     const fetchData = async () => {
       try {
         setIsLoading(true);
         
-        // 政治家情報の取得
-        // 実際のAPIリクエストに置き換える
-        const politicianData: Politician = {
-          id: id || '1',
-          name: '山田太郎',
-          party: '未来党',
-          position: '衆議院議員',
-          profile: '東京都出身。経済政策を専門とし、地域活性化に注力。',
-          nationality: '日本',
-          imageUrl: '/assets/politician1.jpg',
-          links: [
-            { type: 'twitter', url: 'https://twitter.com/yamada_taro' },
-            { type: 'website', url: 'https://yamada-taro.example.com' }
-          ]
-        };
+        if (!id) {
+          setError('政治家IDが指定されていません。');
+          return;
+        }
+        
+        // Mock.tsからデータを取得
+        const politicianData = getMockPoliticianById(id);
+        
+        if (!politicianData) {
+          setError('指定されたIDの政治家が見つかりません。');
+          return;
+        }
         
         // 公約情報の取得
-        // 実際のAPIリクエストに置き換える
-        const promisesData: Promise[] = [
-          {
-            id: '1',
-            politician_id: id || '1',
-            title: '地域経済活性化プラン',
-            description: '地方の中小企業支援と雇用創出を目指します。',
-            category_id: '1',
-            status: 'in_progress',
-            created_at: '2023-01-15',
-            updated_at: '2023-06-20'
-          },
-          {
-            id: '2',
-            politician_id: id || '1',
-            title: '教育改革プログラム',
-            description: 'デジタル教育の推進と教育格差の是正に取り組みます。',
-            category_id: '2',
-            status: 'completed',
-            created_at: '2023-01-15',
-            updated_at: '2023-12-10'
-          }
-        ];
+        const promisesData = getMockPromisesByPoliticianId(id);
         
         // カテゴリ注力度の取得
-        // 実際のAPIリクエストに置き換える
-        const categoryFocusData: CategoryFocus[] = [
-          {
-            category_id: '1',
-            politician_id: id || '1',
-            category_name: '経済',
-            focus_percentage: 40
-          },
-          {
-            category_id: '2',
-            politician_id: id || '1',
-            category_name: '教育',
-            focus_percentage: 30
-          },
-          {
-            category_id: '3',
-            politician_id: id || '1',
-            category_name: '環境',
-            focus_percentage: 20
-          },
-          {
-            category_id: '4',
-            politician_id: id || '1',
-            category_name: '外交',
-            focus_percentage: 10
-          }
-        ];
+        const categoryFocusData = getMockCategoryFocusByPoliticianId(id);
         
         setPolitician(politicianData);
         setPromises(promisesData);
