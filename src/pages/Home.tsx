@@ -125,7 +125,7 @@ const Home: React.FC = () => {
               <Card key={manifesto.id}>
                 <div className="p-4">
                   <h3 className="mb-2 text-lg font-semibold">
-                    <Link to={`/manifesto/${manifesto.id}`}>
+                    <Link to={`/manifestos/${manifesto.id}`}>
                       {manifesto.title}
                     </Link>
                   </h3>
